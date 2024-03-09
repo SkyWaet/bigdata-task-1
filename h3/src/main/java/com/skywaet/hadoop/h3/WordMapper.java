@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 public class WordMapper extends Mapper<Object, Text, Text, Text> {
 
-    private static final Pattern IS_WORD = Pattern.compile("^([^_\\W]|-)+$",
+    private static final Pattern IS_WORD = Pattern.compile("^([^_\\W]+-*)+$",
             Pattern.UNICODE_CHARACTER_CLASS);
 
     public void map(Object key, Text value, Context context)

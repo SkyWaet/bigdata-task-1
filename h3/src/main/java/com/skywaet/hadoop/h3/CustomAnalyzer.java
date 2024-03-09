@@ -14,7 +14,7 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 
     @Override
     protected TokenStreamComponents createComponents(String s) {
-        return new TokenStreamComponents(new PatternTokenizer(Pattern.compile("([^_\\W]|-)+|[.!?]+",
+        return new TokenStreamComponents(new PatternTokenizer(Pattern.compile("([^_\\W]+-*)+|[.!?]+",
                 Pattern.UNICODE_CHARACTER_CLASS), 0));
     }
 }
