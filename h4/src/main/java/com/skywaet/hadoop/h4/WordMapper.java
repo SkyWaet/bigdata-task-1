@@ -1,4 +1,4 @@
-package com.skywaet.hadoop.h3;
+package com.skywaet.hadoop.h4;
 
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
