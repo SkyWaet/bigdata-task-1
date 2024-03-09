@@ -1,4 +1,5 @@
 rootProject.name = 'wordcount'
 include 'h1'
 include 'h2'
+include 'h3'
 
