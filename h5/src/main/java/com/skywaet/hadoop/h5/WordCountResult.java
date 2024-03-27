@@ -23,16 +23,17 @@ public class WordCountResult implements WritableComparable<WordCountResult> {
 
     @Override
     public void write(DataOutput dataOutput) throws IOException {
-        dataOutput.writeChars(word);
-        dataOutput.writeChars(followedBy);
-        dataOutput.writeInt(count);
+        String line = word + " " + followedBy + " " + count;
+        dataOutput.writeUTF(line);
     }
 
     @Override
     public void readFields(DataInput dataInput) throws IOException {
-        word = dataInput.readLine();
-        followedBy = dataInput.readLine();
-        count = dataInput.readInt();
+        String rawLine = dataInput.readUTF();
+        String[] line = rawLine.split("\\s+");
+        word = line[0];
+        followedBy = line[1];
+        count = Integer.parseInt(line[2], 10);
     }
 
     @Override
@@ -60,7 +61,7 @@ public class WordCountResult implements WritableComparable<WordCountResult> {
             return 1;
         }
         if (this.count != o.count) {
-            return this.count - o.count;
+            return o.count - this.count;
         }
         if (!this.word.equals(o.word)) {
             return this.word.compareTo(o.word);

@@ -14,6 +14,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
@@ -44,12 +45,17 @@ public class HadoopDriver extends Configured implements Tool {
         mainJob.setJobName("WordCounter");
         FileInputFormat.addInputPath(mainJob, inputPath);
         FileOutputFormat.setOutputPath(mainJob, unsortedOutputPath);
-        //  mainJob.setOutputFormatClass(SequenceFileOutputFormat.class);
 
         mainJob.setMapperClass(WordMapper.class);
         mainJob.setReducerClass(Summer.class);
         mainJob.setMapOutputKeyClass(Text.class);
         mainJob.setMapOutputValueClass(Text.class);
+
+        mainJob.setOutputKeyClass(Text.class);
+        mainJob.setOutputValueClass(WordCountResult.class);
+
+        mainJob.setOutputFormatClass(SequenceFileOutputFormat.class);
+
 
 
         System.out.println("Input dirs: " + Arrays.toString(FileInputFormat.getInputPaths(mainJob)));
@@ -59,7 +65,7 @@ public class HadoopDriver extends Configured implements Tool {
 
         if (code == 0) {
             Job orderingJob = Job.getInstance(getConf());
-            // orderingJob.setInputFormatClass(SequenceFileInputFormat.class);
+            orderingJob.setInputFormatClass(SequenceFileInputFormat.class);
 
             orderingJob.setJarByClass(HadoopDriver.class);
             orderingJob.setJobName("Sorting");
@@ -100,7 +106,7 @@ public class HadoopDriver extends Configured implements Tool {
 
         @Override
         protected void reduce(WordCountResult key, Iterable<NullWritable> values, Reducer<WordCountResult, NullWritable, Text, Text>.Context context) throws IOException, InterruptedException {
-            context.write(new Text(key.getWord()), new Text(key.getFollowedBy() + "; " + key.getCount()));
+            context.write(new Text(key.getWord()), new Text(key.getFollowedBy() + " " + key.getCount()));
         }
     }
 }
